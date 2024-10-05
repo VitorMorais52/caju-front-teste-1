@@ -1,37 +1,111 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
+
+import {
+  apiUpdateRegistrationStatus,
+  apiDeleteRegistration,
+} from "@/services/api";
+import { deleteItemById, replaceItemById } from "@/utils/functions";
+
+import { Registration } from "@/models/registration";
 import { ButtonSmall } from "@/components/Buttons";
-import * as S from "./styles";
+
 import {
   HiOutlineMail,
   HiOutlineUser,
   HiOutlineCalendar,
   HiOutlineTrash,
 } from "react-icons/hi";
+import * as S from "./styles";
 
-type Props = {
-  data: any;
+type RegistrationCardProps = {
+  data: Registration;
 };
 
-const RegistrationCard = (props: Props) => {
+type UpdateRegistrationsType = "delete" | "update";
+
+const RegistrationCard = ({ data }: RegistrationCardProps) => {
+  const { id, status, employeeName, email, admissionDate } = data;
+  const queryClient = useQueryClient();
+
+  const updateLocalRegistrations = (
+    response: AxiosResponse<Registration, any> | undefined,
+    type: UpdateRegistrationsType
+  ) => {
+    if (response?.statusText !== "OK") return;
+
+    const updatedRegistration = response.data;
+    const actionsByType = {
+      delete: deleteItemById,
+      update: replaceItemById,
+    };
+
+    queryClient.setQueryData(
+      ["registrations"],
+      (registrations: Registration[]) => {
+        const updatedRegistrations = actionsByType[type](
+          registrations,
+          updatedRegistration
+        );
+        return updatedRegistrations;
+      }
+    );
+  };
+
+  const mutation = useMutation({
+    mutationFn: apiUpdateRegistrationStatus,
+    onSuccess: (data) => updateLocalRegistrations(data, "update"),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: apiDeleteRegistration,
+    onSuccess: (data) => updateLocalRegistrations(data, "delete"),
+  });
+
   return (
     <S.Card>
       <S.IconAndText>
         <HiOutlineUser />
-        <h3>{props.data.employeeName}</h3>
+        <h3>{employeeName}</h3>
       </S.IconAndText>
       <S.IconAndText>
         <HiOutlineMail />
-        <p>{props.data.email}</p>
+        <p>{email}</p>
       </S.IconAndText>
       <S.IconAndText>
         <HiOutlineCalendar />
-        <span>{props.data.admissionDate}</span>
+        <span>{admissionDate}</span>
       </S.IconAndText>
       <S.Actions>
-        <ButtonSmall bgcolor="rgb(255, 145, 154)">Reprovar</ButtonSmall>
-        <ButtonSmall bgcolor="rgb(155, 229, 155)">Aprovar</ButtonSmall>
-        <ButtonSmall bgcolor="#ff8858">Revisar novamente</ButtonSmall>
-
-        <HiOutlineTrash />
+        {status === "review" ? (
+          <>
+            <ButtonSmall
+              type="button"
+              bgcolor="rgb(255, 145, 154)"
+              onClick={() => mutation.mutate({ id, newStatus: "rejected" })}
+            >
+              Reprovar
+            </ButtonSmall>
+            <ButtonSmall
+              type="button"
+              bgcolor="rgb(155, 229, 155)"
+              onClick={() => mutation.mutate({ id, newStatus: "approved" })}
+            >
+              Aprovar
+            </ButtonSmall>
+          </>
+        ) : (
+          <ButtonSmall
+            type="button"
+            bgcolor="#ff8858"
+            onClick={() => mutation.mutate({ id, newStatus: "review" })}
+          >
+            Revisar novamente
+          </ButtonSmall>
+        )}
+        <button type="button" onClick={() => deleteMutation.mutate(id)}>
+          <HiOutlineTrash />
+        </button>
       </S.Actions>
     </S.Card>
   );
