@@ -8,3 +8,5 @@ export interface Registration {
   email: string;
   admissionDate: string;
 }
+
+export type RegistrationInput = Omit<Registration, "id" | "status">;

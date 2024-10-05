@@ -1,6 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 
-import { Status, Registration } from "@/models/registration";
+import { Status, Registration, RegistrationInput } from "@/models/registration";
+
+type UpdateStatusParams = { id: number; newStatus: Status };
 
 const api = axios.create({
   baseURL: "http://localhost:3000/",
@@ -18,7 +20,6 @@ export const getRegistrations = async () => {
   }
 };
 
-type UpdateStatusParams = { id: number; newStatus: Status };
 export const apiUpdateRegistrationStatus = async ({
   id,
   newStatus,
@@ -47,6 +48,18 @@ export const apiDeleteRegistration = async (id: number) => {
   }
 };
 
-export const createRegistrationStatus = async () => {};
+export const apiCreateRegistration = async (
+  registration: RegistrationInput
+) => {
+  try {
+    const response: AxiosResponse<Registration> = await api.post(
+      "/registrations/",
+      { ...registration, status: "review" }
+    );
+    return response;
+  } catch (error) {
+    console.error("API error:", error);
+  }
+};
 
 export default api;
