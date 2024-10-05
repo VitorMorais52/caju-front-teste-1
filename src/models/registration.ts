@@ -1,6 +1,8 @@
+export type Status = "review" | "approved" | "rejected";
+
 export interface Registration {
   id: number;
-  status: string;
+  status: Status;
   cpf: string;
   employeeName: string;
   email: string;

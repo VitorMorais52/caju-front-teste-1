@@ -5,9 +5,12 @@ import { groupByStatus } from "@/utils/functions";
 
 import RegistrationCard from "../RegistrationCard";
 
+import { Status } from "@/models/registration";
+
 import * as S from "./styles";
 
-type Column = { status: "review" | "approved" | "rejected"; title: string };
+type Column = { status: Status; title: string };
+
 const columnList: Column[] = [
   { status: "review", title: "Pronto para revisar" },
   { status: "approved", title: "Aprovado" },
@@ -16,7 +19,7 @@ const columnList: Column[] = [
 
 const Columns = () => {
   const { data } = useQuery({
-    queryKey: ["integrations"],
+    queryKey: ["registrations"],
     queryFn: getRegistrations,
   });
 
