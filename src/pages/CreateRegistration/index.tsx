@@ -34,7 +34,7 @@ const CreateRegistrationPage = () => {
     replacement: { _: /\d/ },
   });
 
-  const goToHome = () => history.push(routes.dashboard);
+  const handleNavigateToPage = () => history.push(routes.dashboard);
 
   const handleChangeRegistration =
     (key: keyof RegistrationInput) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -58,7 +58,7 @@ const CreateRegistrationPage = () => {
   return (
     <S.Container>
       <S.Card onSubmit={handleSubmit}>
-        <IconButton onClick={() => goToHome()} aria-label="back">
+        <IconButton onClick={() => handleNavigateToPage()} aria-label="back">
           <HiOutlineArrowLeft size={24} />
         </IconButton>
         <TextField

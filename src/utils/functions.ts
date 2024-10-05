@@ -43,3 +43,5 @@ export const deleteItemById = (
   registrations.filter(
     (currentRegistration) => currentRegistration.id !== updatedRegistration.id
   );
+
+export const extractNumber = (str: string) => str.replace(/[^0-9]/g, "");

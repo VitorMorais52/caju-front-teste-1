@@ -11,9 +11,11 @@ const api = axios.create({
   },
 });
 
-export const getRegistrations = async () => {
+export const apiGetRegistrations = async (
+  params?: Partial<RegistrationInput>
+) => {
   try {
-    const response = await api.get("/registrations");
+    const response = await api.get("/registrations", { params });
     return response.data;
   } catch (error) {
     console.error("API error:", error);

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getRegistrations } from "@/services/api";
+import { apiGetRegistrations } from "@/services/api";
 import { groupByStatus } from "@/utils/functions";
 
 import RegistrationCard from "../RegistrationCard";
@@ -20,7 +20,7 @@ const columnList: Column[] = [
 const Columns = () => {
   const { data } = useQuery({
     queryKey: ["registrations"],
-    queryFn: getRegistrations,
+    queryFn: () => apiGetRegistrations(),
   });
 
   const registrations = groupByStatus(data);
