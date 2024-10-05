@@ -1,10 +1,13 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useHistory } from "react-router-dom";
 
+import { useMask } from "@react-input/mask";
+import { cpf } from "cpf-cnpj-validator";
+
 import { apiCreateRegistration } from "@/services/api";
 import routes from "@/router/routes";
 
-import { Registration, RegistrationInput } from "@/models/registration";
+import { RegistrationInput } from "@/models/registration";
 
 import TextField from "@/components/TextField";
 import Button from "@/components/Buttons";
@@ -26,20 +29,30 @@ const CreateRegistrationPage = () => {
     initial_registration_value
   );
 
+  const refInputCPF = useMask({
+    mask: "___.___.___-__",
+    replacement: { _: /\d/ },
+  });
+
   const goToHome = () => history.push(routes.dashboard);
 
   const handleChangeRegistration =
-    (key: keyof Registration) => (e: ChangeEvent<HTMLInputElement>) => {
+    (key: keyof RegistrationInput) => (e: ChangeEvent<HTMLInputElement>) => {
       setRegistration((prevRegistration) => ({
         ...prevRegistration,
         [key]: e.target.value,
       }));
     };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setRegistration(initial_registration_value);
-    apiCreateRegistration(registration);
+
+    if (!cpf.isValid(registration.cpf)) return;
+
+    const response = await apiCreateRegistration(registration);
+    if (response?.status === 201) {
+      setRegistration(initial_registration_value);
+    }
   };
 
   return (
@@ -65,6 +78,8 @@ const CreateRegistrationPage = () => {
           onChange={handleChangeRegistration("email")}
         />
         <TextField
+          ref={refInputCPF}
+          maxLength={14}
           placeholder="CPF"
           label="CPF"
           type="text"
