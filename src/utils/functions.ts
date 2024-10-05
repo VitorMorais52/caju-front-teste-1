@@ -25,3 +25,21 @@ export const groupByStatus = (
   );
   return groupedRegistrations;
 };
+
+export const replaceItemById = (
+  registrations: Registration[],
+  updatedRegistration: Registration
+) =>
+  registrations.map((currentRegistration) =>
+    currentRegistration.id === updatedRegistration.id
+      ? updatedRegistration
+      : currentRegistration
+  );
+
+export const deleteItemById = (
+  registrations: Registration[],
+  updatedRegistration: Registration
+) =>
+  registrations.filter(
+    (currentRegistration) => currentRegistration.id !== updatedRegistration.id
+  );
