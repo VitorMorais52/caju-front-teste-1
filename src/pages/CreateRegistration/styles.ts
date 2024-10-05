@@ -10,7 +10,7 @@ export const Container = styled.div`
   gap: 16px;
 `;
 
-export const Card = styled.div`
+export const Card = styled.form`
   border: 2px solid #f0f0f0;
   width: 500px;
   padding: 48px;

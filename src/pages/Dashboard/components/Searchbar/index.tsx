@@ -15,7 +15,7 @@ export const SearchBar = () => {
   const queryClient = useQueryClient();
 
   const goToNewAdmissionPage = () => {
-    history.push(routes.newUser);
+    history.push(routes.createRegistration);
   };
 
   const refecthRegistrations = async () =>

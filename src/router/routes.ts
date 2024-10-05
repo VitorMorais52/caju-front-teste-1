@@ -1,6 +1,6 @@
 const routes = {
   dashboard: "/dashboard",
-  newUser: "/new-user",
+  createRegistration: "/create-registration",
 };
 
 export default routes;
