@@ -28,7 +28,7 @@ const RegistrationCard = ({ data }: RegistrationCardProps) => {
   const { id, status, employeeName, email, admissionDate } = data;
   const queryClient = useQueryClient();
 
-  const updateLocalRegistrations = (
+  const updateLocalRegistration = (
     response: AxiosResponse<Registration, any> | undefined,
     type: UpdateRegistrationsType
   ) => {
@@ -52,14 +52,14 @@ const RegistrationCard = ({ data }: RegistrationCardProps) => {
     );
   };
 
-  const mutation = useMutation({
+  const updateMutation = useMutation({
     mutationFn: apiUpdateRegistrationStatus,
-    onSuccess: (data) => updateLocalRegistrations(data, "update"),
+    onSuccess: (data) => updateLocalRegistration(data, "update"),
   });
 
   const deleteMutation = useMutation({
     mutationFn: apiDeleteRegistration,
-    onSuccess: (data) => updateLocalRegistrations(data, "delete"),
+    onSuccess: (data) => updateLocalRegistration(data, "delete"),
   });
 
   return (
@@ -82,14 +82,18 @@ const RegistrationCard = ({ data }: RegistrationCardProps) => {
             <ButtonSmall
               type="button"
               bgcolor="rgb(255, 145, 154)"
-              onClick={() => mutation.mutate({ id, newStatus: "rejected" })}
+              onClick={() =>
+                updateMutation.mutate({ id, newStatus: "rejected" })
+              }
             >
               Reprovar
             </ButtonSmall>
             <ButtonSmall
               type="button"
               bgcolor="rgb(155, 229, 155)"
-              onClick={() => mutation.mutate({ id, newStatus: "approved" })}
+              onClick={() =>
+                updateMutation.mutate({ id, newStatus: "approved" })
+              }
             >
               Aprovar
             </ButtonSmall>
@@ -98,7 +102,7 @@ const RegistrationCard = ({ data }: RegistrationCardProps) => {
           <ButtonSmall
             type="button"
             bgcolor="#ff8858"
-            onClick={() => mutation.mutate({ id, newStatus: "review" })}
+            onClick={() => updateMutation.mutate({ id, newStatus: "review" })}
           >
             Revisar novamente
           </ButtonSmall>
