@@ -43,6 +43,7 @@ const CreateRegistrationPage = () => {
     const response = await createRegistration(registration);
     if (response?.status === 201) {
       setRegistration(initial_registration_value);
+      handleNavigateToPage();
     }
   };
 
