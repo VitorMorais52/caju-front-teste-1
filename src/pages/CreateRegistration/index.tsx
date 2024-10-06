@@ -32,12 +32,11 @@ const CreateRegistrationPage = () => {
   const handleNavigateToPage = () => history.push(routes.dashboard);
 
   const handleChangeRegistration =
-    (key: keyof RegistrationInput) => (e: ChangeEvent<HTMLInputElement>) => {
+    (key: keyof RegistrationInput) => (e: ChangeEvent<HTMLInputElement>) =>
       setRegistration((prevRegistration) => ({
         ...prevRegistration,
         [key]: e.target.value,
       }));
-    };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -64,6 +63,7 @@ const CreateRegistrationPage = () => {
           required
           value={registration.employeeName}
           onChange={handleChangeRegistration("employeeName")}
+          error={error.employeeName}
         />
         <TextField
           placeholder="Email"
@@ -82,7 +82,7 @@ const CreateRegistrationPage = () => {
           required
           value={registration.cpf}
           onChange={handleChangeRegistration("cpf")}
-          error={error}
+          error={error.cpf}
         />
         <TextField
           label="Data de admissão"
