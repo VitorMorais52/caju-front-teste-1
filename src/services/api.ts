@@ -4,7 +4,10 @@ import { Status, Registration, RegistrationInput } from "@/models/registration";
 
 type UpdatePropertyParams = {
   id: number;
-  property: { name: keyof RegistrationInput; value: string | Status };
+  property: {
+    name: keyof RegistrationInput | "status";
+    value: string | Status;
+  };
 };
 
 const api = axios.create({

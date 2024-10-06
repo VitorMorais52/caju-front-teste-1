@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useUpdateRegistrations } from "@/hooks/useUpdateRegistrations";
+import { useUpdateRegistration } from "@/hooks/useUpdateRegistration";
 import { Registration, Status } from "@/models/registration";
 import { ButtonSmall } from "@/components/common/Buttons";
 import {
@@ -17,14 +17,18 @@ type RegistrationCardProps = {
 
 const RegistrationCard = ({ data }: RegistrationCardProps) => {
   const { id, status, employeeName, email, admissionDate } = data;
-  const { updateMutation, deleteMutation } = useUpdateRegistrations();
+  const { updateMutation, deleteMutation } = useUpdateRegistration();
 
   const handleDelete = useCallback(
     () => deleteMutation.mutate(id),
     [deleteMutation, id]
   );
   const handleStatusUpdate = useCallback(
-    (newStatus: Status) => updateMutation.mutate({ id, newStatus }),
+    (newStatus: Status) =>
+      updateMutation.mutate({
+        id,
+        property: { name: "status", value: newStatus },
+      }),
     [updateMutation, id]
   );
 

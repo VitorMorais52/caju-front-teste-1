@@ -9,7 +9,7 @@ import { Registration } from "@/models/registration";
 
 type UpdateRegistrationsType = "delete" | "update";
 
-export const useUpdateRegistrations = () => {
+export const useUpdateRegistration = () => {
   const queryClient = useQueryClient();
 
   const updateLocalRegistration = (
