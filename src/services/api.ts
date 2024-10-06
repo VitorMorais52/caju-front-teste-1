@@ -2,7 +2,10 @@ import axios, { AxiosResponse } from "axios";
 
 import { Status, Registration, RegistrationInput } from "@/models/registration";
 
-type UpdateStatusParams = { id: number; newStatus: Status };
+type UpdatePropertyParams = {
+  id: number;
+  property: { name: keyof RegistrationInput; value: string | Status };
+};
 
 const api = axios.create({
   baseURL: "http://localhost:3000/",
@@ -22,15 +25,16 @@ export const apiGetRegistrations = async (
   }
 };
 
-export const apiUpdateRegistrationStatus = async ({
+export const apiUpdateRegistrationProperty = async ({
   id,
-  newStatus,
-}: UpdateStatusParams) => {
+  property,
+}: UpdatePropertyParams) => {
   try {
+    const { name, value } = property;
     const response: AxiosResponse<Registration> = await api.patch(
       `/registrations/${id}`,
       {
-        status: newStatus,
+        [name]: value,
       }
     );
     return response;

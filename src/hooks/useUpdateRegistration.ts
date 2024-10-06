@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import {
-  apiUpdateRegistrationStatus,
+  apiUpdateRegistrationProperty,
   apiDeleteRegistration,
 } from "@/services/api";
 import { deleteItemById, replaceItemById } from "@/utils/functions";
@@ -37,7 +37,7 @@ export const useUpdateRegistrations = () => {
   };
 
   const updateMutation = useMutation({
-    mutationFn: apiUpdateRegistrationStatus,
+    mutationFn: apiUpdateRegistrationProperty,
     onSuccess: (data) => updateLocalRegistration(data, "update"),
   });
 
