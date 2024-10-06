@@ -9,9 +9,9 @@ import { extractNumber } from "@/utils/functions";
 import { Registration } from "@/models/registration";
 import routes from "@/router/routes";
 
-import Button from "@/components/Buttons";
-import { IconButton } from "@/components/Buttons/IconButton";
-import TextField from "@/components/TextField";
+import Button from "@/components/common/Buttons";
+import { IconButton } from "@/components/common/Buttons/IconButton";
+import TextField from "@/components/common/TextField";
 
 import { HiRefresh } from "react-icons/hi";
 import * as S from "./styles";

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useUpdateRegistrations } from "@/hooks/useUpdateRegistrations";
 import { Registration, Status } from "@/models/registration";
-import { ButtonSmall } from "@/components/Buttons";
+import { ButtonSmall } from "@/components/common/Buttons";
 import {
   HiOutlineMail,
   HiOutlineUser,

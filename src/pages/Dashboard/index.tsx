@@ -1,5 +1,5 @@
-import Columns from "./components/Columns";
-import { SearchBar } from "./components/Searchbar";
+import Columns from "../../components/pages/Dashboard/Columns";
+import { SearchBar } from "../../components/pages/Dashboard/Searchbar";
 import * as S from "./styles";
 
 const DashboardPage = () => {

@@ -5,9 +5,9 @@ import { HiOutlineArrowLeft } from "react-icons/hi";
 import { useCreateRegistration } from "@/hooks/useCreateRegistration";
 import { RegistrationInput } from "@/models/registration";
 import routes from "@/router/routes";
-import { IconButton } from "@/components/Buttons/IconButton";
-import TextField from "@/components/TextField";
-import Button from "@/components/Buttons";
+import { IconButton } from "@/components/common/Buttons/IconButton";
+import TextField from "@/components/common/TextField";
+import Button from "@/components/common/Buttons";
 
 import * as S from "./styles";
 

@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import Router from "@/router";
 
-import { Header } from "./components/Header";
+import { Header } from "./components/common/Header";
 
 function App() {
   const queryClient = new QueryClient();
