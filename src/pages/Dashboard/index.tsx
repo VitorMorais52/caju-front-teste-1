@@ -1,6 +1,6 @@
 import Columns from "./components/Columns";
-import * as S from "./styles";
 import { SearchBar } from "./components/Searchbar";
+import * as S from "./styles";
 
 const DashboardPage = () => {
   return (

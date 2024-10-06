@@ -24,7 +24,7 @@ export const Input = styled.input`
 
 type Props = {
   label?: string;
-  error?: string;
+  error?: string | null;
 } & InputHTMLAttributes<any>;
 
 const TextField = forwardRef<HTMLInputElement, Props>(

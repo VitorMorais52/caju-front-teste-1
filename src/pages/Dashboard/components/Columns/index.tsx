@@ -1,12 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-
-import { apiGetRegistrations } from "@/services/api";
-import { groupByStatus } from "@/utils/functions";
-
-import RegistrationCard from "../RegistrationCard";
-
+import { useRegistrationsByStatus } from "@/hooks/useRegistrations";
 import { Status } from "@/models/registration";
-
+import Column from "../Column";
 import * as S from "./styles";
 
 type Column = { status: Status; title: string };
@@ -18,30 +12,29 @@ const columnList: Column[] = [
 ];
 
 const Columns = () => {
-  const { data } = useQuery({
-    queryKey: ["registrations"],
-    queryFn: () => apiGetRegistrations(),
-  });
+  const { registrationsByStatus, isLoading, error } =
+    useRegistrationsByStatus();
 
-  const registrations = groupByStatus(data);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading registrations.</div>;
+  }
 
   return (
     <S.Container>
-      {columnList.map((column) => {
-        return (
-          <S.Column status={column.status} key={column.title}>
-            <S.TitleColumn status={column.status}>{column.title}</S.TitleColumn>
-            <S.ColumnContent>
-              {registrations[column.status].map((registration) => {
-                return (
-                  <RegistrationCard data={registration} key={registration.id} />
-                );
-              })}
-            </S.ColumnContent>
-          </S.Column>
-        );
-      })}
+      {columnList.map((column) => (
+        <Column
+          key={column.title}
+          title={column.title}
+          status={column.status}
+          registrations={registrationsByStatus[column.status] || []}
+        />
+      ))}
     </S.Container>
   );
 };
+
 export default Columns;

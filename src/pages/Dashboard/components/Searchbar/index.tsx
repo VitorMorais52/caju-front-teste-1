@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useCallback } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useHistory } from "react-router-dom";
 import { useMask } from "@react-input/mask";
@@ -26,51 +26,64 @@ export const SearchBar = () => {
     replacement: { _: /\d/ },
   });
 
-  const updateAllLocalRegistrations = (
-    registrations: Registration[] | undefined
-  ) => queryClient.setQueryData(["registrations"], () => registrations);
+  const updateAllLocalRegistrations = useCallback(
+    (registrations: Registration[]) =>
+      queryClient.setQueryData(["registrations"], () => registrations),
+    [queryClient]
+  );
 
   const updateMutation = useMutation({
     mutationFn: apiGetRegistrations,
     onSuccess: updateAllLocalRegistrations,
   });
 
-  const handleCpf = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
+  const handleCpf = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
 
-    if (value.length === 14 && cpf.isValid(value)) {
-      updateMutation.mutate({ cpf: extractNumber(value) });
-    }
-    setCpfInput(value);
-  };
+      if (value.length === 14 && cpf.isValid(value)) {
+        updateMutation.mutate({ cpf: extractNumber(value) });
+      }
+      setCpfInput(value);
+    },
+    [updateMutation]
+  );
 
   const handleNavigateToPage = () => history.push(routes.createRegistration);
 
-  const handleRefecthRegistrations = async () =>
+  const handleRefetchRegistrations = async () => {
     await queryClient.refetchQueries({
       queryKey: ["registrations"],
     });
+  };
 
   return (
     <S.Container>
       <TextField
         ref={refInputCPF}
         maxLength={14}
+        aria-label="Digite um CPF válido"
         placeholder="Digite um CPF válido"
         type="text"
         pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
         required
         value={cpfInput}
-        onChange={(e) => handleCpf(e)}
+        onChange={handleCpf}
       />
       <S.Actions>
         <IconButton
-          aria-label="refetch"
-          onClick={() => handleRefecthRegistrations()}
+          aria-label="recarregar admissões"
+          title="Recarregar"
+          onClick={handleRefetchRegistrations}
         >
           <HiRefresh />
         </IconButton>
-        <Button onClick={() => handleNavigateToPage()}>Nova Admissão</Button>
+        <Button
+          aria-label="Adicionar nova admissão"
+          onClick={handleNavigateToPage}
+        >
+          Nova Admissão
+        </Button>
       </S.Actions>
     </S.Container>
   );

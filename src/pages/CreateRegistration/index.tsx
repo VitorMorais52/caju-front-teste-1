@@ -1,19 +1,14 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useHistory } from "react-router-dom";
-
 import { useMask } from "@react-input/mask";
-import { cpf } from "cpf-cnpj-validator";
-
-import { apiCreateRegistration } from "@/services/api";
-import routes from "@/router/routes";
-
+import { HiOutlineArrowLeft } from "react-icons/hi";
+import { useCreateRegistration } from "@/hooks/useCreateRegistration";
 import { RegistrationInput } from "@/models/registration";
-
+import routes from "@/router/routes";
+import { IconButton } from "@/components/Buttons/IconButton";
 import TextField from "@/components/TextField";
 import Button from "@/components/Buttons";
-import { IconButton } from "@/components/Buttons/IconButton";
 
-import { HiOutlineArrowLeft } from "react-icons/hi";
 import * as S from "./styles";
 
 const initial_registration_value: RegistrationInput = {
@@ -28,7 +23,7 @@ const CreateRegistrationPage = () => {
   const [registration, setRegistration] = useState<RegistrationInput>(
     initial_registration_value
   );
-
+  const { createRegistration, error } = useCreateRegistration();
   const refInputCPF = useMask({
     mask: "___.___.___-__",
     replacement: { _: /\d/ },
@@ -46,10 +41,7 @@ const CreateRegistrationPage = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (!cpf.isValid(registration.cpf)) return;
-
-    const response = await apiCreateRegistration(registration);
+    const response = await createRegistration(registration);
     if (response?.status === 201) {
       setRegistration(initial_registration_value);
     }
@@ -58,7 +50,11 @@ const CreateRegistrationPage = () => {
   return (
     <S.Container>
       <S.Card onSubmit={handleSubmit}>
-        <IconButton onClick={() => handleNavigateToPage()} aria-label="back">
+        <IconButton
+          onClick={handleNavigateToPage}
+          title="Voltar"
+          aria-label="Voltar para o dashboard"
+        >
           <HiOutlineArrowLeft size={24} />
         </IconButton>
         <TextField
@@ -83,10 +79,10 @@ const CreateRegistrationPage = () => {
           placeholder="CPF"
           label="CPF"
           type="text"
-          pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
           required
           value={registration.cpf}
           onChange={handleChangeRegistration("cpf")}
+          error={error}
         />
         <TextField
           label="Data de admissão"
@@ -95,7 +91,9 @@ const CreateRegistrationPage = () => {
           value={registration.admissionDate}
           onChange={handleChangeRegistration("admissionDate")}
         />
-        <Button type="submit">Cadastrar</Button>
+        <Button aria-label="Cadastrar registro" type="submit">
+          Cadastrar
+        </Button>
       </S.Card>
     </S.Container>
   );
