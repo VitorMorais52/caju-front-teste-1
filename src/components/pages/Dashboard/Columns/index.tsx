@@ -15,10 +15,6 @@ const Columns = () => {
   const { registrationsByStatus, isLoading, error } =
     useRegistrationsByStatus();
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   if (error) {
     return <div>Error loading registrations.</div>;
   }
@@ -30,6 +26,7 @@ const Columns = () => {
           key={column.title}
           title={column.title}
           status={column.status}
+          isLoading={isLoading}
           registrations={registrationsByStatus[column.status] || []}
         />
       ))}
