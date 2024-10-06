@@ -45,3 +45,8 @@ export const deleteItemById = (
   );
 
 export const extractNumber = (str: string) => str.replace(/[^0-9]/g, "");
+
+export const validateEmployeeName = (name: string) => {
+  const regex = /^[A-Za-zÀ-ÖØ-öø-ÿ]+.*\s+.+$/;
+  return regex.test(name);
+};
