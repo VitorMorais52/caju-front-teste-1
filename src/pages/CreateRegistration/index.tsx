@@ -9,6 +9,7 @@ import routes from "@/router/routes";
 import { IconButton } from "@/components/common/Buttons/IconButton";
 import TextField from "@/components/common/TextField";
 import Button from "@/components/common/Buttons";
+import Spinner from "@/components/pages/Dashboard/Spinner";
 
 import { HiOutlineArrowLeft } from "react-icons/hi";
 import * as S from "./styles";
@@ -32,6 +33,7 @@ const sweet_alert_settings: SweetAlertOptions = {
 
 const CreateRegistrationPage = () => {
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(false);
   const [registration, setRegistration] = useState<RegistrationInput>(
     initial_registration_value
   );
@@ -51,10 +53,14 @@ const CreateRegistrationPage = () => {
       }));
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    setIsLoading(true);
     event.preventDefault();
     const response = await createRegistration(registration);
 
-    if (!response) return;
+    if (!response) {
+      setIsLoading(false);
+      return;
+    }
 
     if (response?.status === 201) {
       setRegistration(initial_registration_value);
@@ -71,6 +77,7 @@ const CreateRegistrationPage = () => {
         text: "Houve um erro ao cadastrar o registro. Tente novamente mais tarde.",
         settings: { ...sweet_alert_settings, showCancelButton: false },
       });
+    setIsLoading(false);
   };
 
   return (
@@ -118,8 +125,12 @@ const CreateRegistrationPage = () => {
           value={registration.admissionDate}
           onChange={handleChangeRegistration("admissionDate")}
         />
-        <Button aria-label="Cadastrar registro" type="submit">
-          Cadastrar
+        <Button
+          aria-label="Cadastrar registro"
+          type="submit"
+          disabled={isLoading}
+        >
+          {isLoading ? <Spinner color="white" /> : "Cadastrar"}
         </Button>
       </S.Card>
     </S.Container>
