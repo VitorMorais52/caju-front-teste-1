@@ -42,11 +42,11 @@ export const SearchBar = () => {
       showActionFeedback({
         type: "success",
         title: "Dados carregados com sucesso.",
-        settings: { timer: 4000 },
+        settings: { timer: 2000 },
       }),
         updateAllLocalRegistrations(registrations);
       setIsLoading(false);
-      setShowClear(true);
+      setShowClear(cpfInput.length ? true : false);
     },
     onError: () => {
       showActionFeedback({
@@ -55,7 +55,7 @@ export const SearchBar = () => {
         settings: { timer: 4000 },
       });
       setIsLoading(false);
-      setShowClear(true);
+      setShowClear(cpfInput.length ? true : false);
     },
   });
 
@@ -68,10 +68,23 @@ export const SearchBar = () => {
         setShowClear(false);
         updateMutation.mutate({ cpf: extractNumber(value) });
       }
+
+      const filterWasCleanedAfterSearch =
+        !value.length && cpfInput.length > 0 && showClear;
+
+      if (filterWasCleanedAfterSearch) {
+        updateMutation.mutate({});
+      }
+
       setCpfInput(value);
     },
-    [updateMutation]
+    [cpfInput.length, showClear, updateMutation]
   );
+
+  const clearCpfInput = () => {
+    setCpfInput("");
+    updateMutation.mutate({});
+  };
 
   const handleNavigateToPage = () => history.push(routes.createRegistration);
 
@@ -115,7 +128,7 @@ export const SearchBar = () => {
           <IconButton
             aria-label="Limpar o campo do CPF"
             title="Limpar CPF"
-            onClick={() => setCpfInput("")}
+            onClick={clearCpfInput}
           >
             <HiOutlineX />
           </IconButton>
