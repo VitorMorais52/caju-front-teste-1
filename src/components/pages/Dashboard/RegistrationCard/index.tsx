@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { showConfirmationModal } from "@/utils/sweetAlert2";
 import { useUpdateRegistration } from "@/hooks/useUpdateRegistration";
 import { Registration, Status } from "@/models/registration";
 import { ButtonSmall } from "@/components/common/Buttons";
@@ -20,14 +21,25 @@ const RegistrationCard = ({ data }: RegistrationCardProps) => {
   const { updateMutation, deleteMutation } = useUpdateRegistration();
 
   const handleDelete = useCallback(
-    () => deleteMutation.mutate(id),
+    () =>
+      showConfirmationModal({
+        title: "Tem certeza?",
+        text: "Esse registro será excluído permanentemente.",
+        confirmAction: () => deleteMutation.mutate(id),
+      }),
     [deleteMutation, id]
   );
+
   const handleStatusUpdate = useCallback(
     (newStatus: Status) =>
-      updateMutation.mutate({
-        id,
-        property: { name: "status", value: newStatus },
+      showConfirmationModal({
+        title: "Tem certeza?",
+        text: "O status desse registro será alterado permanentemente.",
+        confirmAction: () =>
+          updateMutation.mutate({
+            id,
+            property: { name: "status", value: newStatus },
+          }),
       }),
     [updateMutation, id]
   );

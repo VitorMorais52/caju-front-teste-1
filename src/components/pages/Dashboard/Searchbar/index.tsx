@@ -6,6 +6,7 @@ import { cpf } from "cpf-cnpj-validator";
 
 import { apiGetRegistrations } from "@/services/api";
 import { extractNumber } from "@/utils/functions";
+import { showActionFeedback } from "@/utils/sweetAlert2";
 import { Registration } from "@/models/registration";
 import routes from "@/router/routes";
 
@@ -52,9 +53,22 @@ export const SearchBar = () => {
   const handleNavigateToPage = () => history.push(routes.createRegistration);
 
   const handleRefetchRegistrations = async () => {
-    await queryClient.refetchQueries({
-      queryKey: ["registrations"],
-    });
+    await queryClient
+      .refetchQueries({
+        queryKey: ["registrations"],
+      })
+      .then(() => {
+        showActionFeedback({
+          type: "success",
+          title: "Dados atualizados com sucesso.",
+        });
+      })
+      .catch(() => {
+        showActionFeedback({
+          type: "error",
+          title: "Houve um erro ao atualizar os dados. ",
+        });
+      });
   };
 
   return (

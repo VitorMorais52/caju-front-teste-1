@@ -1,14 +1,16 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useMask } from "@react-input/mask";
-import { HiOutlineArrowLeft } from "react-icons/hi";
+import { SweetAlertOptions } from "sweetalert2";
 import { useCreateRegistration } from "@/hooks/useCreateRegistration";
+import { showActionFeedback } from "@/utils/sweetAlert2";
 import { RegistrationInput } from "@/models/registration";
 import routes from "@/router/routes";
 import { IconButton } from "@/components/common/Buttons/IconButton";
 import TextField from "@/components/common/TextField";
 import Button from "@/components/common/Buttons";
 
+import { HiOutlineArrowLeft } from "react-icons/hi";
 import * as S from "./styles";
 
 const initial_registration_value: RegistrationInput = {
@@ -16,6 +18,16 @@ const initial_registration_value: RegistrationInput = {
   employeeName: "",
   email: "",
   admissionDate: "",
+};
+
+const sweet_alert_settings: SweetAlertOptions = {
+  position: "center",
+  toast: false,
+  showConfirmButton: true,
+  showCancelButton: true,
+  cancelButtonText: "Cancelar",
+  timer: 3000,
+  timerProgressBar: true,
 };
 
 const CreateRegistrationPage = () => {
@@ -43,8 +55,19 @@ const CreateRegistrationPage = () => {
     const response = await createRegistration(registration);
     if (response?.status === 201) {
       setRegistration(initial_registration_value);
-      handleNavigateToPage();
-    }
+      showActionFeedback({
+        type: "success",
+        title: "Cadastrado com sucesso!",
+        text: "Você será redirecionado para o Dashboard.",
+        settings: sweet_alert_settings,
+        confirmAction: handleNavigateToPage,
+      });
+    } else
+      showActionFeedback({
+        type: "error",
+        text: "Houve um erro ao cadastrar o registro. Tente novamente mais tarde.",
+        settings: sweet_alert_settings,
+      });
   };
 
   return (
