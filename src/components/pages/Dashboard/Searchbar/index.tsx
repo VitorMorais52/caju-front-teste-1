@@ -22,7 +22,8 @@ export const SearchBar = () => {
   const history = useHistory();
   const queryClient = useQueryClient();
   const [cpfInput, setCpfInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isFilterLoading, setIsFilterLoading] = useState(false);
+  const [isRefetchLoading, setIsRefetchLoading] = useState(false);
   const [showClear, setShowClear] = useState(false);
 
   const refInputCPF = useMask({
@@ -41,7 +42,9 @@ export const SearchBar = () => {
     onSuccess: (registrations) => {
       showActionFeedback({
         type: "success",
-        title: "Dados carregados com sucesso.",
+        title: `Dados ${
+          isRefetchLoading ? "recarregados" : "carregados"
+        } com sucesso.`,
         settings: { timer: 2000 },
       }),
         updateAllLocalRegistrations(registrations);
@@ -49,12 +52,15 @@ export const SearchBar = () => {
     onError: () => {
       showActionFeedback({
         type: "error",
-        title: "Houve um erro ao carregar os dados.",
+        title: `Houve um erro ao ${
+          isRefetchLoading ? "recarregar" : "carregar"
+        } os dados.`,
         settings: { timer: 4000 },
       });
     },
     onSettled: () => {
-      setIsLoading(false);
+      setIsFilterLoading(false);
+      setIsRefetchLoading(false);
       setShowClear(cpfInput.length ? true : false);
     },
   });
@@ -64,7 +70,7 @@ export const SearchBar = () => {
       const { value } = e.target;
 
       if (value.length === 14 && cpf.isValid(value)) {
-        setIsLoading(true);
+        setIsFilterLoading(true);
         setShowClear(false);
         updateMutation.mutate({ cpf: extractNumber(value) });
       }
@@ -73,6 +79,7 @@ export const SearchBar = () => {
         !value.length && cpfInput.length > 0 && showClear;
 
       if (filterWasCleanedAfterSearch) {
+        setIsFilterLoading(true);
         updateMutation.mutate({});
       }
 
@@ -83,29 +90,15 @@ export const SearchBar = () => {
 
   const clearCpfInput = () => {
     setCpfInput("");
+    setIsFilterLoading(true);
     updateMutation.mutate({});
   };
 
   const handleNavigateToPage = () => history.push(routes.createRegistration);
 
   const handleRefetchRegistrations = async () => {
-    await queryClient.refetchQueries({
-      queryKey: ["registrations"],
-    });
-
-    const queryState = queryClient.getQueryState(["registrations"]);
-
-    if (queryState?.status === "error") {
-      showActionFeedback({
-        type: "error",
-        title: "Houve um erro ao atualizar os dados.",
-      });
-    } else {
-      showActionFeedback({
-        type: "success",
-        title: "Dados atualizados com sucesso.",
-      });
-    }
+    setIsRefetchLoading(true);
+    updateMutation.mutate({});
   };
 
   return (
@@ -123,7 +116,7 @@ export const SearchBar = () => {
           value={cpfInput}
           onChange={handleCpf}
         />
-        {isLoading && <Spinner />}
+        {isFilterLoading && <Spinner />}
         {showClear && cpfInput.length > 0 && (
           <IconButton
             aria-label="Limpar o campo do CPF"
@@ -135,13 +128,17 @@ export const SearchBar = () => {
         )}
       </S.InputCpfWrapper>
       <S.Actions>
-        <IconButton
-          aria-label="recarregar admissões"
-          title="Recarregar dados"
-          onClick={handleRefetchRegistrations}
-        >
-          <HiRefresh />
-        </IconButton>
+        {isRefetchLoading ? (
+          <Spinner />
+        ) : (
+          <IconButton
+            aria-label="recarregar admissões"
+            title="Recarregar dados"
+            onClick={handleRefetchRegistrations}
+          >
+            <HiRefresh />
+          </IconButton>
+        )}
         <Button
           aria-label="Adicionar nova admissão"
           onClick={handleNavigateToPage}
