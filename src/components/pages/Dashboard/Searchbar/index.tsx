@@ -10,17 +10,20 @@ import { showActionFeedback } from "@/utils/sweetAlert2";
 import { Registration } from "@/models/registration";
 import routes from "@/router/routes";
 
-import Button from "@/components/common/Buttons";
 import { IconButton } from "@/components/common/Buttons/IconButton";
+import Button from "@/components/common/Buttons";
 import TextField from "@/components/common/TextField";
+import Spinner from "../Spinner";
 
-import { HiRefresh } from "react-icons/hi";
+import { HiRefresh, HiOutlineX } from "react-icons/hi";
 import * as S from "./styles";
 
 export const SearchBar = () => {
   const history = useHistory();
   const queryClient = useQueryClient();
   const [cpfInput, setCpfInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showClear, setShowClear] = useState(false);
 
   const refInputCPF = useMask({
     mask: "___.___.___-__",
@@ -42,13 +45,18 @@ export const SearchBar = () => {
         settings: { timer: 4000 },
       }),
         updateAllLocalRegistrations(registrations);
+      setIsLoading(false);
+      setShowClear(true);
     },
-    onError: () =>
+    onError: () => {
       showActionFeedback({
         type: "error",
         title: "Houve um erro ao carregar os dados.",
         settings: { timer: 4000 },
-      }),
+      });
+      setIsLoading(false);
+      setShowClear(true);
+    },
   });
 
   const handleCpf = useCallback(
@@ -56,6 +64,8 @@ export const SearchBar = () => {
       const { value } = e.target;
 
       if (value.length === 14 && cpf.isValid(value)) {
+        setIsLoading(true);
+        setShowClear(false);
         updateMutation.mutate({ cpf: extractNumber(value) });
       }
       setCpfInput(value);
@@ -87,17 +97,29 @@ export const SearchBar = () => {
 
   return (
     <S.Container>
-      <TextField
-        ref={refInputCPF}
-        maxLength={14}
-        aria-label="Digite um CPF válido"
-        placeholder="Digite um CPF válido"
-        type="text"
-        pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
-        required
-        value={cpfInput}
-        onChange={handleCpf}
-      />
+      <S.InputCpfWrapper>
+        <TextField
+          ref={refInputCPF}
+          maxLength={14}
+          aria-label="Digite um CPF válido"
+          placeholder="Digite um CPF válido"
+          type="text"
+          pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+          required
+          value={cpfInput}
+          onChange={handleCpf}
+        />
+        {isLoading && <Spinner />}
+        {showClear && cpfInput.length > 0 && (
+          <IconButton
+            aria-label="Limpar o campo do CPF"
+            title="Limpar CPF"
+            onClick={() => setCpfInput("")}
+          >
+            <HiOutlineX />
+          </IconButton>
+        )}
+      </S.InputCpfWrapper>
       <S.Actions>
         <IconButton
           aria-label="recarregar admissões"
