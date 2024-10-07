@@ -28,11 +28,11 @@ type Props = {
 } & InputHTMLAttributes<any>;
 
 const TextField = forwardRef<HTMLInputElement, Props>(
-  ({ label, error, ...props }, ref) => {
+  ({ label, error, id, ...props }, ref) => {
     return (
       <div>
-        {label && <label htmlFor={props.id}>{label}</label>}
-        <Input ref={ref} {...props} />
+        {label && <label htmlFor={label || id}>{label}</label>}
+        <Input ref={ref} id={label || id} {...props} />
         {error && <span style={{ fontSize: 12, color: "red" }}>{error}</span>}
       </div>
     );
