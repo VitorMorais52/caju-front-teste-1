@@ -3,6 +3,7 @@ import { showConfirmationModal } from "@/utils/sweetAlert2";
 import { useUpdateRegistration } from "@/hooks/useUpdateRegistration";
 import { Registration, Status } from "@/models/registration";
 import { ButtonSmall } from "@/components/common/Buttons";
+import Spinner from "../Spinner";
 import {
   HiOutlineMail,
   HiOutlineUser,
@@ -11,6 +12,7 @@ import {
 } from "react-icons/hi";
 
 import * as S from "./styles";
+import { IconButton } from "@/components/common/Buttons/IconButton";
 
 type RegistrationCardProps = {
   data: Registration;
@@ -65,15 +67,25 @@ const RegistrationCard = ({ data }: RegistrationCardProps) => {
               type="button"
               bgcolor="rgb(255, 145, 154)"
               onClick={() => handleStatusUpdate("rejected")}
+              disabled={updateMutation.isPending}
             >
-              Reprovar
+              {updateMutation.isPending ? (
+                <Spinner size="12px" color="white" />
+              ) : (
+                "Reprovar"
+              )}
             </ButtonSmall>
             <ButtonSmall
               type="button"
               bgcolor="rgb(155, 229, 155)"
               onClick={() => handleStatusUpdate("approved")}
+              disabled={updateMutation.isPending}
             >
-              Aprovar
+              {updateMutation.isPending ? (
+                <Spinner size="12px" color="white" />
+              ) : (
+                "Aprovar"
+              )}
             </ButtonSmall>
           </>
         ) : (
@@ -81,18 +93,27 @@ const RegistrationCard = ({ data }: RegistrationCardProps) => {
             type="button"
             bgcolor="#ff8858"
             onClick={() => handleStatusUpdate("review")}
+            disabled={updateMutation.isPending}
           >
-            Revisar novamente
+            {updateMutation.isPending ? (
+              <Spinner size="12px" color="white" />
+            ) : (
+              "Revisar novamente"
+            )}
           </ButtonSmall>
         )}
-        <button
-          type="button"
-          aria-label="Deletar registro"
-          title="Deletar"
-          onClick={handleDelete}
-        >
-          <HiOutlineTrash />
-        </button>
+        {deleteMutation.isPending ? (
+          <Spinner size="12px" />
+        ) : (
+          <IconButton
+            aria-label="Deletar registro"
+            title="Deletar"
+            onClick={handleDelete}
+            className="deleteButton"
+          >
+            <HiOutlineTrash />
+          </IconButton>
+        )}
       </S.Actions>
     </S.Card>
   );

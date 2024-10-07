@@ -4,12 +4,16 @@ const spinnerBorder = keyframes`
   to { transform: rotate(360deg); }
 `;
 
-export const Container = styled.div`
+interface ContainerProps {
+  size?: string;
+  color?: string;
+}
+export const Container = styled.div<ContainerProps>`
   display: inline-block;
-  width: 18px;
-  height: 18px;
+  width: ${({ size }) => size || "18px"};
+  height: ${({ size }) => size || "18px"};
   vertical-align: text-bottom;
-  border: 2px solid rgba(255, 117, 0, 1);
+  border: 2px solid ${({ color }) => color || "rgba(255, 117, 0, 1)"};
   border-right-color: transparent;
   border-radius: 50%;
   animation: ${spinnerBorder} 0.75s linear infinite;
