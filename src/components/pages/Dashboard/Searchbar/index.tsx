@@ -100,6 +100,7 @@ export const SearchBar = () => {
       <S.InputCpfWrapper>
         <TextField
           ref={refInputCPF}
+          title="Busque por CPF"
           maxLength={14}
           aria-label="Digite um CPF válido"
           placeholder="Digite um CPF válido"
@@ -123,7 +124,7 @@ export const SearchBar = () => {
       <S.Actions>
         <IconButton
           aria-label="recarregar admissões"
-          title="Recarregar"
+          title="Recarregar dados"
           onClick={handleRefetchRegistrations}
         >
           <HiRefresh />
