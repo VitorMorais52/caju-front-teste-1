@@ -5,7 +5,13 @@ import TextField from ".";
 describe("TextField", () => {
   it("renders correctly with the given value", () => {
     render(
-      <TextField title="Name" maxLength={14} type="text" value={"Caju"} />
+      <TextField
+        title="Name"
+        maxLength={14}
+        type="text"
+        value={"Caju"}
+        onChange={() => {}}
+      />
     );
     const inputElement = screen.getByDisplayValue("Caju");
     expect(inputElement).toBeInTheDocument();
