@@ -66,6 +66,8 @@ const RegistrationCard = ({ data }: RegistrationCardProps) => {
             <ButtonSmall
               type="button"
               bgcolor="rgb(255, 145, 154)"
+              title="Reprovar"
+              aria-label="Reprovar"
               onClick={() => handleStatusUpdate("rejected")}
               disabled={updateMutation.isPending}
             >
@@ -78,6 +80,8 @@ const RegistrationCard = ({ data }: RegistrationCardProps) => {
             <ButtonSmall
               type="button"
               bgcolor="rgb(155, 229, 155)"
+              title="Aprovar"
+              aria-label="Aprovar"
               onClick={() => handleStatusUpdate("approved")}
               disabled={updateMutation.isPending}
             >
@@ -92,6 +96,8 @@ const RegistrationCard = ({ data }: RegistrationCardProps) => {
           <ButtonSmall
             type="button"
             bgcolor="#ff8858"
+            title="Revisar novamente"
+            aria-label="Revisar novamente"
             onClick={() => handleStatusUpdate("review")}
             disabled={updateMutation.isPending}
           >
