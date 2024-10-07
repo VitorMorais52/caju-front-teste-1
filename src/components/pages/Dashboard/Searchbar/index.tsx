@@ -35,7 +35,20 @@ export const SearchBar = () => {
 
   const updateMutation = useMutation({
     mutationFn: apiGetRegistrations,
-    onSuccess: updateAllLocalRegistrations,
+    onSuccess: (registrations) => {
+      showActionFeedback({
+        type: "success",
+        title: "Dados carregados com sucesso.",
+        settings: { timer: 4000 },
+      }),
+        updateAllLocalRegistrations(registrations);
+    },
+    onError: () =>
+      showActionFeedback({
+        type: "error",
+        title: "Houve um erro ao carregar os dados.",
+        settings: { timer: 4000 },
+      }),
   });
 
   const handleCpf = useCallback(
@@ -53,22 +66,23 @@ export const SearchBar = () => {
   const handleNavigateToPage = () => history.push(routes.createRegistration);
 
   const handleRefetchRegistrations = async () => {
-    await queryClient
-      .refetchQueries({
-        queryKey: ["registrations"],
-      })
-      .then(() => {
-        showActionFeedback({
-          type: "success",
-          title: "Dados atualizados com sucesso.",
-        });
-      })
-      .catch(() => {
-        showActionFeedback({
-          type: "error",
-          title: "Houve um erro ao atualizar os dados. ",
-        });
+    await queryClient.refetchQueries({
+      queryKey: ["registrations"],
+    });
+
+    const queryState = queryClient.getQueryState(["registrations"]);
+
+    if (queryState?.status === "error") {
+      showActionFeedback({
+        type: "error",
+        title: "Houve um erro ao atualizar os dados.",
       });
+    } else {
+      showActionFeedback({
+        type: "success",
+        title: "Dados atualizados com sucesso.",
+      });
+    }
   };
 
   return (

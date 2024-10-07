@@ -17,6 +17,11 @@ const api = axios.create({
   },
 });
 
+const handleError = (err: any) => {
+  console.error("API error:", err);
+  throw err;
+};
+
 export const apiGetRegistrations = async (
   params?: Partial<RegistrationInput>
 ) => {
@@ -24,7 +29,7 @@ export const apiGetRegistrations = async (
     const response = await api.get("/registrations", { params });
     return response.data;
   } catch (error) {
-    console.error("API error:", error);
+    handleError(error);
   }
 };
 
@@ -42,7 +47,7 @@ export const apiUpdateRegistrationProperty = async ({
     );
     return response;
   } catch (error) {
-    console.error("API error:", error);
+    handleError(error);
   }
 };
 
@@ -53,7 +58,7 @@ export const apiDeleteRegistration = async (id: number) => {
     );
     return response;
   } catch (error) {
-    console.error("API error:", error);
+    handleError(error);
   }
 };
 
@@ -67,7 +72,7 @@ export const apiCreateRegistration = async (
     );
     return response;
   } catch (error) {
-    console.error("API error:", error);
+    handleError(error);
   }
 };
 

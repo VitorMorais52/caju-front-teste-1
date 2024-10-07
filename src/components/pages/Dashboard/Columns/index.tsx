@@ -12,12 +12,7 @@ const columnList: Column[] = [
 ];
 
 const Columns = () => {
-  const { registrationsByStatus, isLoading, error } =
-    useRegistrationsByStatus();
-
-  if (error) {
-    return <div>Error loading registrations.</div>;
-  }
+  const { registrationsByStatus, isLoading } = useRegistrationsByStatus();
 
   return (
     <S.Container>

@@ -53,6 +53,9 @@ const CreateRegistrationPage = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const response = await createRegistration(registration);
+
+    if (!response) return;
+
     if (response?.status === 201) {
       setRegistration(initial_registration_value);
       showActionFeedback({
@@ -66,7 +69,7 @@ const CreateRegistrationPage = () => {
       showActionFeedback({
         type: "error",
         text: "Houve um erro ao cadastrar o registro. Tente novamente mais tarde.",
-        settings: sweet_alert_settings,
+        settings: { ...sweet_alert_settings, showCancelButton: false },
       });
   };
 
