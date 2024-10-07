@@ -45,8 +45,6 @@ export const SearchBar = () => {
         settings: { timer: 2000 },
       }),
         updateAllLocalRegistrations(registrations);
-      setIsLoading(false);
-      setShowClear(cpfInput.length ? true : false);
     },
     onError: () => {
       showActionFeedback({
@@ -54,6 +52,8 @@ export const SearchBar = () => {
         title: "Houve um erro ao carregar os dados.",
         settings: { timer: 4000 },
       });
+    },
+    onSettled: () => {
       setIsLoading(false);
       setShowClear(cpfInput.length ? true : false);
     },
