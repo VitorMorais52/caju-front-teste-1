@@ -16,7 +16,7 @@ const registrationStatusStyles: {
   },
 };
 
-export const Column = styled.div<{ status: any }>`
+export const Column = styled.section<{ status: any }>`
   height: auto;
   background-color: ${({ status }) =>
     registrationStatusStyles[status].background};

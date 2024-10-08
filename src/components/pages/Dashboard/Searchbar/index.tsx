@@ -102,7 +102,7 @@ const SearchBar = () => {
   };
 
   return (
-    <S.Container>
+    <S.Container aria-labelledby="search bar">
       <S.InputCpfWrapper>
         <TextField
           ref={refInputCPF}

@@ -2,11 +2,11 @@ import styled from "styled-components";
 import { _IconButtonStyled } from "@/components/common/Buttons/IconButton";
 import Button from "@/components/common/Buttons";
 
-export const Container = styled.div`
+export const Container = styled.main`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
   gap: 16px;
 `;
 
