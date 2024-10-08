@@ -21,8 +21,14 @@ export const Column = styled.section<{ status: any }>`
   background-color: ${({ status }) =>
     registrationStatusStyles[status].background};
   border-radius: 32px;
-  min-height: 80vh;
-  max-height: 80vh;
+  min-height: 70vh;
+  max-height: 70vh;
+
+  @media (max-width: 867px) {
+    overflow: auto;
+    min-height: 50vh;
+    max-height: 50vh;
+  }
 `;
 
 export const TitleColumn = styled.h3<{ status: any }>`
@@ -31,7 +37,7 @@ export const TitleColumn = styled.h3<{ status: any }>`
   margin: 24px;
 `;
 
-export const ColumnContent = styled.div`
+export const ColumnContent = styled.ul`
   overflow: auto;
-  max-height: 85%;
+  max-height: 80%;
 `;

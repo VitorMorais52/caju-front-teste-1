@@ -5,6 +5,10 @@ export const Container = styled.section`
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+
+  @media (max-width: 520px) {
+    flex-direction: column;
+  }
 `;
 
 export const InputCpfWrapper = styled.div`
