@@ -5,21 +5,19 @@ import CreateRegistrationPage from "@/pages/CreateRegistration";
 
 const Router = () => {
   return (
-    <div style={{ marginTop: 64 }}>
-      <HashRouter>
-        <Switch>
-          <Route exact path={routes.dashboard} component={DashboardPage} />
-          <Route
-            exact
-            path={routes.createRegistration}
-            component={CreateRegistrationPage}
-          />
-          <Route exact path="*">
-            <Redirect to={routes.dashboard} />
-          </Route>
-        </Switch>
-      </HashRouter>
-    </div>
+    <HashRouter>
+      <Switch>
+        <Route exact path={routes.dashboard} component={DashboardPage} />
+        <Route
+          exact
+          path={routes.createRegistration}
+          component={CreateRegistrationPage}
+        />
+        <Route exact path="*">
+          <Redirect to={routes.dashboard} />
+        </Route>
+      </Switch>
+    </HashRouter>
   );
 };
 
