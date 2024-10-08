@@ -47,7 +47,7 @@ const RegistrationCard = ({ data }: RegistrationCardProps) => {
   );
 
   return (
-    <S.Card>
+    <S.Card data-testid={`user-card-${employeeName}`}>
       <S.IconAndText>
         <HiOutlineUser />
         <h3>{employeeName}</h3>
