@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SearchBar } from "./";
+import SearchBar from "./";
 import "@testing-library/jest-dom";
 import * as api from "@/services/api";
 import { act } from "react";

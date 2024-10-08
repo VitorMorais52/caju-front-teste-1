@@ -18,7 +18,7 @@ import Spinner from "../Spinner";
 import { HiRefresh, HiOutlineX } from "react-icons/hi";
 import * as S from "./styles";
 
-export const SearchBar = () => {
+const SearchBar = () => {
   const history = useHistory();
   const queryClient = useQueryClient();
   const [cpfInput, setCpfInput] = useState("");
@@ -149,3 +149,5 @@ export const SearchBar = () => {
     </S.Container>
   );
 };
+
+export default SearchBar;
