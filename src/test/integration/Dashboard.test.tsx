@@ -73,11 +73,15 @@ describe("DashboardPage", () => {
   test("renders the data after API call", async () => {
     renderWithProviders();
 
-    await waitFor(() => {
-      expect(screen.getByText("Filipe Marins")).toBeInTheDocument();
-      expect(screen.getByText("José Leão")).toBeInTheDocument();
-      expect(screen.getByText("Luiz Filho")).toBeInTheDocument();
-    });
+    // Aguarda que os elementos estejam no documento
+    const filipeMarins = await screen.findByText("Filipe Marins");
+    const joseLeao = await screen.findByText("José Leão");
+    const luizFilho = await screen.findByText("Luiz Filho");
+
+    // Verifica se os elementos estão no documento
+    expect(filipeMarins).toBeInTheDocument();
+    expect(joseLeao).toBeInTheDocument();
+    expect(luizFilho).toBeInTheDocument();
   });
 
   test("approves a registration", async () => {
